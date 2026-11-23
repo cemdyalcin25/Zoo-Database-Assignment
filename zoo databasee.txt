@@ -1,0 +1,74 @@
+/* =====================================================
+   CREATE DATABASE
+   This creates a new database called MovieStudioDB
+===================================================== */
+CREATE DATABASE MovieStudioDB;
+GO
+
+/* Switch to the new database */
+USE MovieStudioDB;
+GO
+
+/* =====================================================
+   CREATE DIRECTORS TABLE (Parent Table)
+   DirectorID is the PRIMARY KEY
+===================================================== */
+CREATE TABLE Directors (
+    DirectorID INT PRIMARY KEY,        -- Unique identifier for each director
+    DirectorName VARCHAR(100),         -- Director's full name
+    MovieTitle VARCHAR(100)            -- Movie they directed
+);
+GO
+
+/* =====================================================
+   CREATE ACTORS TABLE (Child Table)
+   ActorID is PRIMARY KEY
+   DirectorID is FOREIGN KEY referencing Directors
+===================================================== */
+CREATE TABLE Actors (
+    ActorID INT PRIMARY KEY,           -- Unique identifier for each actor
+    ActorName VARCHAR(100),            -- Actor's full name
+    MovieTitle VARCHAR(100),           -- Movie the actor appeared in
+    DirectorID INT,                    -- Foreign key linking to Directors table
+
+    CONSTRAINT FK_Director
+    FOREIGN KEY (DirectorID)
+    REFERENCES Directors(DirectorID)
+);
+GO
+
+/* =====================================================
+   INSERT DATA INTO DIRECTORS TABLE
+   At least five rows required
+===================================================== */
+INSERT INTO Directors VALUES (1, 'Christopher Nolan', 'Inception');
+INSERT INTO Directors VALUES (2, 'Steven Spielberg', 'Jurassic Park');
+INSERT INTO Directors VALUES (3, 'James Cameron', 'Avatar');
+INSERT INTO Directors VALUES (4, 'Peter Jackson', 'The Lord of the Rings');
+INSERT INTO Directors VALUES (5, 'Greta Gerwig', 'Barbie');
+GO
+
+/* =====================================================
+   INSERT DATA INTO ACTORS TABLE
+   Foreign key values must exist in Directors table
+===================================================== */
+INSERT INTO Actors VALUES (101, 'Leonardo DiCaprio', 'Inception', 1);
+INSERT INTO Actors VALUES (102, 'Sam Neill', 'Jurassic Park', 2);
+INSERT INTO Actors VALUES (103, 'Sam Worthington', 'Avatar', 3);
+INSERT INTO Actors VALUES (104, 'Elijah Wood', 'The Lord of the Rings', 4);
+INSERT INTO Actors VALUES (105, 'Margot Robbie', 'Barbie', 5);
+GO
+
+/* =====================================================
+   QUERY DATA FROM BOTH TABLES
+   Join Actors and Directors using DirectorID
+   Shows shared MovieTitle attribute
+===================================================== */
+SELECT 
+    Actors.ActorName,
+    Directors.DirectorName,
+    Actors.MovieTitle
+FROM Actors
+INNER JOIN Directors
+ON Actors.DirectorID = Directors.DirectorID;
+GO
